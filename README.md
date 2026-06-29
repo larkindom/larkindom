@@ -1,7 +1,7 @@
 ### Hi, I'm Larkin
 
 Technical Product Manager in NYC with 6+ years building user-driven digital
-products, specializing in **private capital markets, real estate, and proptech**.
+products, specializing in **private capital markets and real estate proptech**.
 
 **A couple of things I've built:**
 
