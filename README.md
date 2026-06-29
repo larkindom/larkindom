@@ -17,7 +17,4 @@ clean article text, and emails a single EPUB "newspaper" to my Kindle. Runs free
 on GitHub Actions.
 *Demonstrates: scoping a real workflow problem and automating it reliably.*
 
-I'm excited about in fintech, proptech, and personal-finance domains, and increasingly building with
-AI tooling.
-
 📫 [LinkedIn](https://www.linkedin.com/in/larkindomench) · 📍 NYC
