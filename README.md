@@ -35,7 +35,6 @@ that maps every flavor of Financial Independence / Retire Early (Coast, Lean,
 regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
 client-side. 
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
-
 **[Try it out!](https://larkindom.github.io/Fire-Calc/)**
 
 
