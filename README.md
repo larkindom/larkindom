@@ -29,11 +29,14 @@ built: the pretraining objective, tokenization, data pipelines, scaling laws, an
 with two live in-browser demos (next-token sampling and byte-pair tokenization).
 *Demonstrates: turning a dense technical lecture into a structured, interactive teaching tool.*
 
+** [Explore the Primer!](https://larkindom.github.io/LLMTrainingLecture/)**
+
 **[FIRE Calculator](https://github.com/larkindom/Fire-Calc)** — an interactive tool
 that maps every flavor of Financial Independence / Retire Early (Coast, Lean,
 regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
 client-side. 
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
+
 **[Try it out!](https://larkindom.github.io/Fire-Calc/)**
 
 
