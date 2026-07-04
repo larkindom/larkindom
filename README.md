@@ -24,3 +24,14 @@ regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
 client-side. 
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
 **[▶ Try the live demo](https://larkindom.github.io/Fire-Calc/)**
+
+**[LLM Building & Training Primer](https://github.com/larkindom/LLMTrainingLecture)** — a single-page,
+click-through primer distilled from a Stanford CS229 guest lecture on how ChatGPT-like models are actually
+built: the pretraining objective, tokenization, data pipelines, scaling laws, and post-training (SFT/RLHF/DPO),
+with two live in-browser demos (next-token sampling and byte-pair tokenization).
+*Demonstrates: turning a dense technical lecture into a structured, interactive teaching tool.*
+
+**[PRD to Prototype](https://github.com/larkindom/PRDtoPrototype)** — a tool that takes a written product
+requirements doc (PRD) and generates a clickable HTML prototype from it, closing the gap between "what we
+spec'd" and "what it should feel like" without waiting on a design or engineering cycle.
+*Demonstrates: shortening the distance between product intent and something stakeholders can actually click through.*
