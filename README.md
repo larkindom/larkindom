@@ -37,5 +37,14 @@ client-side.
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
 **[Try it out!](https://larkindom.github.io/Fire-Calc/)**
 
+**[Product Pulse](./product-dashboard-poc)** — a wireframe proof of concept for the
+"ultimate product dashboard" concept ([Department of Product](https://departmentofproduct.substack.com/p/how-to-build-the-ultimate-product)):
+health metrics across users/UX/commercial/engineering, a decision queue, a live
+sprint board, competitor intelligence, a principle-of-the-day card, and a
+stakeholder update generator with Slack/email/voice-note send buttons stubbed
+out for future MCP connectors. Dummy data, dependency-free, fully client-side.
+*Demonstrates: scoping a fuzzy dashboard concept into a concrete, clickable
+wireframe before wiring up real integrations.*
+
 
 

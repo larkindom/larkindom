@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Pulse — Ultimate Product Dashboard (POC)</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* blue */
+    --series-2:       #1baf7a; /* aqua */
+    --series-3:       #eda100; /* yellow */
+    --series-4:       #008300; /* green */
+    --series-5:       #4a3aa7; /* violet */
+    --series-6:       #e34948; /* red */
+    --series-7:       #e87ba4; /* magenta */
+    --series-8:       #eb6834; /* orange */
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --delta-good:     #006300;
+  }
+  :root[data-theme="dark"] {
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-1:       #3987e5;
+    --series-2:       #199e70;
+    --series-3:       #c98500;
+    --series-4:       #008300;
+    --series-5:       #9085e9;
+    --series-6:       #e66767;
+    --series-7:       #d55181;
+    --series-8:       #d95926;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --delta-good:     #0ca30c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
+      --series-2:       #199e70;
+      --series-3:       #c98500;
+      --series-4:       #008300;
+      --series-5:       #9085e9;
+      --series-6:       #e66767;
+      --series-7:       #d55181;
+      --series-8:       #d95926;
+      --delta-good:     #0ca30c;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 20px 20px 64px; }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .topbar h1 { font-size: 22px; margin: 0 0 2px; letter-spacing: -0.01em; }
+  .topbar .sub { color: var(--text-secondary); font-size: 13px; }
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .btn {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    border-radius: 8px; padding: 9px 14px; border: 1px solid var(--border);
+    background: var(--surface-1); color: var(--text-primary);
+  }
+  .btn:hover { filter: brightness(0.97); }
+  :root[data-theme="dark"] .btn:hover,
+  @media (prefers-color-scheme: dark) { .btn:hover { filter: brightness(1.15); } }
+  .btn-primary {
+    background: var(--series-1); color: #fff; border-color: transparent;
+  }
+  .btn-icon {
+    width: 34px; height: 34px; padding: 0; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 15px;
+  }
+
+  .connectors { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+    color: var(--text-secondary); background: var(--surface-1);
+  }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); flex: none; }
+  .chip.connected .dot { background: var(--good); }
+
+  /* ---------- Section headings ---------- */
+  .panel {
+    background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+  }
+  .panel h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-secondary); margin: 0 0 12px; font-weight: 700;
+  }
+  .panel h2 .count {
+    font-variant-numeric: tabular-nums; color: var(--text-muted); font-weight: 600;
+    text-transform: none; letter-spacing: normal; margin-left: 6px;
+  }
+
+  /* ---------- KPI grid ---------- */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px;
+  }
+  @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi { display: flex; flex-direction: column; gap: 6px; }
+  .kpi-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+  .kpi-value-row { display: flex; align-items: baseline; gap: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  .kpi-delta { font-size: 12px; font-weight: 700; }
+  .kpi-delta.up { color: var(--delta-good); }
+  .kpi-delta.down { color: var(--critical); }
+  .kpi-sub { font-size: 11px; color: var(--text-muted); }
+  .kpi svg { margin-top: 2px; }
+
+  /* ---------- Mid + work grid ---------- */
+  .mid-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .work-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; margin-bottom: 14px; }
+  @media (max-width: 900px) { .mid-grid, .work-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Decision queue ---------- */
+  .decision-list { display: flex; flex-direction: column; gap: 10px; }
+  .decision {
+    display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .decision-body { flex: 1; min-width: 0; }
+  .decision-title { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+  .decision-ctx { font-size: 12px; color: var(--text-secondary); }
+  .decision-meta { font-size: 11px; color: var(--text-muted); margin-top: 5px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
+    font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+    border: 1px solid var(--border);
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .badge.high .dot { background: var(--critical); } .badge.high { color: var(--critical); }
+  .badge.medium .dot { background: var(--warning); } .badge.medium { color: #8a5a00; }
+  :root[data-theme="dark"] .badge.medium { color: var(--warning); }
+  @media (prefers-color-scheme: dark) { .badge.medium { color: var(--warning); } }
+  .badge.low .dot { background: var(--good); } .badge.low { color: var(--delta-good); }
+  .decision-actions { display: flex; flex-direction: column; gap: 6px; flex: none; }
+  .decision-actions button {
+    font-size: 11px; font-weight: 600; padding: 5px 9px; border-radius: 6px;
+    border: 1px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer;
+  }
+  .decision-actions button.done { color: var(--good); border-color: var(--good); }
+  .decision.resolved { opacity: 0.45; }
+
+  /* ---------- Principle of the day ---------- */
+  .principle-card { display: flex; flex-direction: column; height: 100%; }
+  .principle-quote {
+    font-size: 15px; line-height: 1.5; font-style: italic; flex: 1;
+    margin-bottom: 12px;
+  }
+  .principle-source { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+  .principle-source b { color: var(--text-primary); }
+
+  /* ---------- Kanban ---------- */
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  @media (max-width: 700px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
+  .kanban-col-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between;
+  }
+  .kanban-card {
+    background: var(--page); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px; margin-bottom: 8px; font-size: 12px;
+  }
+  .kanban-card .t { font-weight: 600; margin-bottom: 4px; }
+  .kanban-card .m { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 11px; }
+  .src-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+  .src-tag.linear { background: rgba(74,58,167,0.14); color: var(--series-5); }
+  .src-tag.jira { background: rgba(42,120,214,0.14); color: var(--series-1); }
+
+  /* ---------- Competitor intel ---------- */
+  .intel-list { display: flex; flex-direction: column; gap: 12px; }
+  .intel-item { padding-bottom: 12px; border-bottom: 1px solid var(--gridline); }
+  .intel-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .intel-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+  .intel-comp { font-weight: 700; color: var(--text-secondary); }
+  .intel-text { font-size: 12.5px; }
+
+  /* ---------- Legend / burndown ---------- */
+  .legend { display: flex; gap: 14px; font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 12px; height: 2px; border-radius: 2px; display: inline-block; }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 16px; overflow-y: auto; z-index: 50;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--surface-1); border-radius: 14px; max-width: 560px; width: 100%;
+    padding: 22px; border: 1px solid var(--border);
+  }
+  .modal h3 { margin: 0 0 4px; font-size: 17px; }
+  .modal .modal-sub { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px; }
+  .modal-section { margin-bottom: 14px; }
+  .modal-section label.opt {
+    display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 0;
+  }
+  .modal textarea {
+    width: 100%; min-height: 140px; font: inherit; font-size: 12.5px; line-height: 1.5;
+    padding: 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--page); color: var(--text-primary); resize: vertical;
+  }
+  .channel-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+  .toast {
+    font-size: 12px; padding: 10px 12px; border-radius: 8px; margin-top: 10px;
+    background: rgba(42,120,214,0.10); border: 1px solid rgba(42,120,214,0.25); color: var(--text-primary);
+    display: none;
+  }
+  .toast.show { display: block; }
+
+  footer.note {
+    margin-top: 24px; font-size: 11.5px; color: var(--text-muted); text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div>
+      <h1>Product Pulse</h1>
+      <div class="sub" id="today-date"></div>
+      <div class="connectors" id="connectors"></div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-icon" id="theme-toggle" title="Toggle theme">◐</button>
+      <button class="btn btn-primary" id="open-update">Generate stakeholder update</button>
+    </div>
+  </div>
+
+  <section class="kpi-grid" id="kpi-grid"></section>
+
+  <section class="mid-grid">
+    <div class="panel">
+      <h2>Decision queue <span class="count" id="decision-count"></span></h2>
+      <div class="decision-list" id="decision-list"></div>
+    </div>
+    <div class="panel">
+      <h2>Principle of the day</h2>
+      <div class="principle-card" id="principle-card"></div>
+    </div>
+  </section>
+
+  <section class="work-grid">
+    <div class="panel">
+      <h2>Live work in progress <span class="count">· current sprint</span></h2>
+      <div class="legend" id="burndown-legend"></div>
+      <svg id="burndown" width="100%" height="120" viewBox="0 0 600 120" preserveAspectRatio="none" style="margin-bottom:16px;"></svg>
+      <div class="kanban" id="kanban"></div>
+    </div>
+    <div class="panel">
+      <h2>Competitor intelligence</h2>
+      <div class="intel-list" id="intel-list"></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Wireframe proof of concept — every number on this page is dummy data. Connector chips and
+    the update generator show where Slack, Linear/Jira, and analytics MCPs would plug in.
+  </footer>
+</div>
+
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal">
+    <h3>Generate stakeholder update</h3>
+    <div class="modal-sub">Pick what to include, then send it wherever stakeholders read updates.</div>
+    <div class="modal-section" id="update-options"></div>
+    <div class="modal-section">
+      <textarea id="update-draft" readonly></textarea>
+    </div>
+    <div class="channel-row" id="channel-row"></div>
+    <div class="toast" id="send-toast"></div>
+    <div class="modal-footer">
+      <button class="btn" id="close-modal">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- Dummy data ---------------- */
+
+  const DATA = {
+    connectors: [
+      { name: "Slack", connected: false },
+      { name: "Linear", connected: false },
+      { name: "Jira", connected: false },
+      { name: "Amplitude", connected: false },
+      { name: "Stripe", connected: false },
+    ],
+    kpis: [
+      {
+        key: "users", label: "Users", value: "41.2K", sub: "MAU · 8,420 DAU · 20.4% stickiness",
+        delta: "+3.1%", up: true,
+        series: [31, 33, 32, 35, 37, 36, 39, 41.2],
+      },
+      {
+        key: "ux", label: "Experience (UX)", value: "87%", sub: "Task success · CSAT 4.3 / 5",
+        delta: "+2 pts", up: true,
+        series: [79, 81, 80, 83, 84, 85, 86, 87],
+      },
+      {
+        key: "commercial", label: "Commercial", value: "$128.4K", sub: "MRR · net revenue retention 108%",
+        delta: "+6.2% MoM", up: true,
+        series: [98, 101, 104, 109, 113, 118, 123, 128.4],
+      },
+      {
+        key: "engineering", label: "Engineering velocity", value: "42 pts", sub: "per sprint · 3.2d cycle time",
+        delta: "-4 pts", up: false,
+        series: [46, 44, 45, 47, 43, 44, 45, 42],
+      },
+    ],
+    decisions: [
+      {
+        title: "Approve pricing test for annual plans",
+        context: "Growth wants a 15% annual-plan discount live for new signups in EU before end of quarter.",
+        impact: "high", owner: "Priya (Growth)", due: "Due in 2 days",
+      },
+      {
+        title: "Sign off on onboarding redesign scope",
+        context: "Design proposes cutting step 3 (team invite) from first-run flow based on drop-off data.",
+        impact: "medium", owner: "Design", due: "Due in 4 days",
+      },
+      {
+        title: "Confirm deprecation date for legacy API v1",
+        context: "Eng needs a hard date to message to the 12 remaining integration partners.",
+        impact: "high", owner: "Platform eng", due: "Due in 1 week",
+      },
+      {
+        title: "Review support macro for billing disputes",
+        context: "Support ops drafted new copy after last week's spike in chargeback tickets.",
+        impact: "low", owner: "Support ops", due: "Due in 2 weeks",
+      },
+    ],
+    burndown: {
+      days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      ideal: [42, 37.8, 33.6, 29.4, 25.2, 21, 16.8, 12.6, 8.4, 4.2, 0],
+      actual: [42, 40, 38, 36, 34, 33, 30, 26, 22, 18, 12],
+    },
+    kanban: {
+      "To do": [
+        { t: "Migrate billing webhooks to v2", pts: 5, src: "jira" },
+        { t: "Spike: SSO for enterprise tier", pts: 8, src: "linear" },
+      ],
+      "In progress": [
+        { t: "Onboarding step-3 removal", pts: 3, src: "linear" },
+        { t: "Rate limit dashboard alerts", pts: 5, src: "jira" },
+      ],
+      "In review": [
+        { t: "Annual plan pricing toggle", pts: 3, src: "linear" },
+      ],
+      "Done": [
+        { t: "Legacy API usage report", pts: 2, src: "jira" },
+        { t: "CSAT survey instrumentation", pts: 3, src: "linear" },
+      ],
+    },
+    competitors: [
+      { name: "Rivalcorp", text: "Shipped a self-serve annual plan with 20% discount — undercuts our current offer.", when: "3h ago", source: "Pricing page" },
+      { name: "Northstar", text: "Announced SOC 2 Type II — closes a gap enterprise prospects have flagged twice this month.", when: "1d ago", source: "Press release" },
+      { name: "Fieldwire", text: "Laid off 8% of staff; roadmap thread suggests mobile app is deprioritized.", when: "2d ago", source: "LinkedIn" },
+      { name: "Rivalcorp", text: "New integrations page lists a Slack app — matches our Q3 roadmap item.", when: "3d ago", source: "Changelog" },
+    ],
+    principles: [
+      { quote: "Fall in love with the problem, not the solution.", book: "Inspired", author: "Marty Cagan" },
+      { quote: "Your most unhappy customers are your greatest source of learning.", book: "The Innovator's Solution", author: "Clayton Christensen" },
+      { quote: "A product is a solution to a problem in a context.", book: "Shape Up", author: "Ryan Singer" },
+      { quote: "If you're not embarrassed by the first version of your product, you've launched too late.", book: "Reid Hoffman (attributed)", author: "Reid Hoffman" },
+      { quote: "The job of product management is to discover a product that is valuable, usable, and feasible.", book: "Inspired", author: "Marty Cagan" },
+    ],
+  };
+
+  const fmt = (n) => n.toFixed ? n.toFixed(1) : n;
+
+  /* ---------------- Sparkline ---------------- */
+
+  function sparkline(values, w, h, color) {
+    const min = Math.min(...values), max = Math.max(...values);
+    const pad = 4;
+    const step = (w - pad * 2) / (values.length - 1);
+    const scaleY = (v) => {
+      if (max === min) return h / 2;
+      return h - pad - ((v - min) / (max - min)) * (h - pad * 2);
+    };
+    const pts = values.map((v, i) => [pad + i * step, scaleY(v)]);
+    const d = pts.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+    const last = pts[pts.length - 1];
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.5" fill="${color}"/>
+    </svg>`;
+  }
+
+  /* ---------------- Render: KPIs ---------------- */
+
+  function renderKPIs() {
+    const el = document.getElementById("kpi-grid");
+    const css = getComputedStyle(document.documentElement);
+    const seriesColor = css.getPropertyValue("--series-1").trim() || "#2a78d6";
+    el.innerHTML = DATA.kpis.map((k) => `
+      <div class="panel kpi">
+        <div class="kpi-label">${k.label}</div>
+        <div class="kpi-value-row">
+          <div class="kpi-value">${k.value}</div>
+          <div class="kpi-delta ${k.up ? "up" : "down"}">${k.up ? "▲" : "▼"} ${k.delta}</div>
+        </div>
+        <div class="kpi-sub">${k.sub}</div>
+        ${sparkline(k.series, 220, 36, seriesColor)}
+      </div>
+    `).join("");
+  }
+
+  /* ---------------- Render: decision queue ---------------- */
+
+  function renderDecisions() {
+    const list = document.getElementById("decision-list");
+    document.getElementById("decision-count").textContent = "· " + DATA.decisions.length + " pending";
+    list.innerHTML = DATA.decisions.map((d, i) => `
+      <div class="decision" data-idx="${i}">
+        <div class="decision-body">
+          <div class="decision-title">${d.title}</div>
+          <div class="decision-ctx">${d.context}</div>
+          <div class="decision-meta">
+            <span class="badge ${d.impact}"><span class="dot"></span>${d.impact} impact</span>
+            <span>${d.owner}</span>
+            <span>${d.due}</span>
+          </div>
+        </div>
+        <div class="decision-actions">
+          <button class="resolve">Approve</button>
+          <button>Defer</button>
+        </div>
+      </div>
+    `).join("");
+    list.querySelectorAll(".resolve").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const row = btn.closest(".decision");
+        row.classList.add("resolved");
+        btn.textContent = "Approved";
+        btn.classList.add("done");
+      });
+    });
+  }
+
+  /* ---------------- Render: principle of the day ---------------- */
+
+  let principleIdx = new Date().getDate() % DATA.principles.length;
+
+  function renderPrinciple() {
+    const p = DATA.principles[principleIdx];
+    document.getElementById("principle-card").innerHTML = `
+      <div class="principle-quote">&ldquo;${p.quote}&rdquo;</div>
+      <div class="principle-source"><b>${p.book}</b> — ${p.author}</div>
+      <button class="btn" id="shuffle-principle">Shuffle</button>
+    `;
+    document.getElementById("shuffle-principle").addEventListener("click", () => {
+      principleIdx = (principleIdx + 1) % DATA.principles.length;
+      renderPrinciple();
+    });
+  }
+
+  /* ---------------- Render: kanban + burndown ---------------- */
+
+  function renderKanban() {
+    const el = document.getElementById("kanban");
+    el.innerHTML = Object.entries(DATA.kanban).map(([col, cards]) => `
+      <div>
+        <div class="kanban-col-label"><span>${col}</span><span>${cards.length}</span></div>
+        ${cards.map((c) => `
+          <div class="kanban-card">
+            <div class="t">${c.t}</div>
+            <div class="m"><span class="src-tag ${c.src}">${c.src === "jira" ? "Jira" : "Linear"}</span><span>${c.pts} pts</span></div>
+          </div>
+        `).join("")}
+      </div>
+    `).join("");
+  }
+
+  function renderBurndown() {
+    const css = getComputedStyle(document.documentElement);
+    const idealColor = css.getPropertyValue("--baseline").trim() || "#c3c2b7";
+    const actualColor = css.getPropertyValue("--series-1").trim() || "#2a78d6";
+    const gridColor = css.getPropertyValue("--gridline").trim() || "#e1e0d9";
+
+    document.getElementById("burndown-legend").innerHTML = `
+      <span><i style="background:${idealColor};border-top:2px dashed ${idealColor};height:0;"></i>Ideal</span>
+      <span><i style="background:${actualColor};"></i>Actual</span>
+    `;
+
+    const w = 600, h = 120, pad = 10;
+    const { days, ideal, actual } = DATA.burndown;
+    const maxV = Math.max(...ideal, ...actual);
+    const stepX = (w - pad * 2) / (days.length - 1);
+    const scaleY = (v) => h - pad - (v / maxV) * (h - pad * 2);
+
+    const line = (arr) => arr.map((v, i) => (i === 0 ? "M" : "L") + (pad + i * stepX).toFixed(1) + "," + scaleY(v).toFixed(1)).join(" ");
+
+    let gridLines = "";
+    for (let i = 0; i <= 3; i++) {
+      const y = pad + (i / 3) * (h - pad * 2);
+      gridLines += `<line x1="${pad}" y1="${y.toFixed(1)}" x2="${w - pad}" y2="${y.toFixed(1)}" stroke="${gridColor}" stroke-width="1"/>`;
+    }
+
+    document.getElementById("burndown").innerHTML = `
+      ${gridLines}
+      <path d="${line(ideal)}" fill="none" stroke="${idealColor}" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+      <path d="${line(actual)}" fill="none" stroke="${actualColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    `;
+  }
+
+  /* ---------------- Render: competitor intel ---------------- */
+
+  function renderIntel() {
+    document.getElementById("intel-list").innerHTML = DATA.competitors.map((c) => `
+      <div class="intel-item">
+        <div class="intel-top"><span class="intel-comp">${c.name}</span><span>${c.when} · ${c.source}</span></div>
+        <div class="intel-text">${c.text}</div>
+      </div>
+    `).join("");
+  }
+
+  /* ---------------- Render: connectors ---------------- */
+
+  function renderConnectors() {
+    document.getElementById("connectors").innerHTML = DATA.connectors.map((c) => `
+      <span class="chip ${c.connected ? "connected" : ""}">
+        <span class="dot"></span>${c.name} · ${c.connected ? "connected" : "not connected"}
+      </span>
+    `).join("");
+  }
+
+  /* ---------------- Stakeholder update generator ---------------- */
+
+  const UPDATE_SECTIONS = [
+    { key: "kpis", label: "Product health metrics", default: true },
+    { key: "decisions", label: "Open decisions", default: true },
+    { key: "work", label: "Live work in progress", default: true },
+    { key: "competitors", label: "Competitor intelligence", default: false },
+    { key: "principle", label: "Principle of the day", default: false },
+  ];
+
+  function renderUpdateOptions() {
+    document.getElementById("update-options").innerHTML = UPDATE_SECTIONS.map((s) => `
+      <label class="opt">
+        <input type="checkbox" data-key="${s.key}" ${s.default ? "checked" : ""}>
+        ${s.label}
+      </label>
+    `).join("");
+    document.querySelectorAll("#update-options input").forEach((cb) => {
+      cb.addEventListener("change", buildDraft);
+    });
+  }
+
+  function buildDraft() {
+    const checked = new Set(
+      [...document.querySelectorAll("#update-options input:checked")].map((cb) => cb.dataset.key)
+    );
+    const lines = [`Product update — ${new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}`, ""];
+
+    if (checked.has("kpis")) {
+      lines.push("Health metrics:");
+      DATA.kpis.forEach((k) => lines.push(`  • ${k.label}: ${k.value} (${k.delta})`));
+      lines.push("");
+    }
+    if (checked.has("decisions")) {
+      lines.push("Open decisions:");
+      DATA.decisions.forEach((d) => lines.push(`  • [${d.impact}] ${d.title} — ${d.due}`));
+      lines.push("");
+    }
+    if (checked.has("work")) {
+      const total = Object.values(DATA.kanban).flat().length;
+      const done = DATA.kanban["Done"].length;
+      lines.push(`Live work: ${done}/${total} sprint items done, burndown tracking ${DATA.burndown.actual[DATA.burndown.actual.length - 1] > DATA.burndown.ideal[DATA.burndown.ideal.length - 1] ? "slightly behind" : "on"} pace.`);
+      lines.push("");
+    }
+    if (checked.has("competitors")) {
+      lines.push("Competitor watch:");
+      DATA.competitors.slice(0, 2).forEach((c) => lines.push(`  • ${c.name}: ${c.text}`));
+      lines.push("");
+    }
+    if (checked.has("principle")) {
+      const p = DATA.principles[principleIdx];
+      lines.push(`Principle of the day: "${p.quote}" — ${p.author}, ${p.book}`);
+      lines.push("");
+    }
+    document.getElementById("update-draft").value = lines.join("\n").trim();
+  }
+
+  function renderChannels() {
+    const channels = [
+      { key: "slack", label: "Send to Slack" },
+      { key: "email", label: "Send via email" },
+      { key: "voice", label: "Record voice note" },
+    ];
+    document.getElementById("channel-row").innerHTML = channels.map((c) => `<button class="btn" data-channel="${c.key}">${c.label}</button>`).join("");
+    document.querySelectorAll("#channel-row button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const connector = { slack: "Slack", email: "Email", voice: "Voice" }[btn.dataset.channel];
+        const toast = document.getElementById("send-toast");
+        toast.textContent = `${connector} MCP isn't wired up in this proof of concept — in the real dashboard this would post the draft above straight to ${connector === "Slack" ? "a #product-updates channel" : connector === "Email" ? "your stakeholder distribution list" : "a synthesized voice note"}.`;
+        toast.classList.add("show");
+      });
+    });
+  }
+
+  function openModal() {
+    document.getElementById("send-toast").classList.remove("show");
+    buildDraft();
+    document.getElementById("modal-overlay").classList.remove("hidden");
+  }
+  function closeModal() {
+    document.getElementById("modal-overlay").classList.add("hidden");
+  }
+
+  /* ---------------- Theme toggle ---------------- */
+
+  function initTheme() {
+    const root = document.documentElement;
+    const stored = localStorage.getItem("pp-theme");
+    if (stored) root.setAttribute("data-theme", stored);
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const current = root.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+      const next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("pp-theme", next);
+      renderKPIs();
+      renderBurndown();
+    });
+  }
+
+  /* ---------------- Init ---------------- */
+
+  document.getElementById("today-date").textContent = new Date().toLocaleDateString(undefined, {
+    weekday: "long", month: "long", day: "numeric", year: "numeric",
+  });
+
+  initTheme();
+  renderConnectors();
+  renderKPIs();
+  renderDecisions();
+  renderPrinciple();
+  renderKanban();
+  renderBurndown();
+  renderIntel();
+  renderUpdateOptions();
+  renderChannels();
+
+  document.getElementById("open-update").addEventListener("click", openModal);
+  document.getElementById("close-modal").addEventListener("click", closeModal);
+  document.getElementById("modal-overlay").addEventListener("click", (e) => {
+    if (e.target.id === "modal-overlay") closeModal();
+  });
+})();
+</script>
+</body>
+</html>
