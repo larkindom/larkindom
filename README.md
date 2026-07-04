@@ -24,3 +24,10 @@ regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
 client-side. 
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
 **[▶ Try the live demo](https://larkindom.github.io/Fire-Calc/)**
+
+**[PRD → Prototype](https://github.com/larkindom/PRDtoPrototype)** — takes a
+structured PRD (problem, goals, personas, screens, and the flow between them)
+and generates a clickable HTML prototype, so a PRD can be user-tested before
+a designer or engineer touches it. Ships with a real-estate deal-intake
+example.
+*Demonstrates: turning the earliest artifact in the product process into something testable, and validating the input (dangling links, missing fields) instead of trusting it.*
