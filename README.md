@@ -28,8 +28,7 @@ click-through primer distilled from a Stanford CS229 guest lecture on how ChatGP
 built: the pretraining objective, tokenization, data pipelines, scaling laws, and post-training (SFT/RLHF/DPO),
 with two live in-browser demos (next-token sampling and byte-pair tokenization).
 *Demonstrates: turning a dense technical lecture into a structured, interactive teaching tool.*
-
-** [Explore the Primer!](https://larkindom.github.io/LLMTrainingLecture/)**
+**[Explore the Primer!](https://larkindom.github.io/LLMTrainingLecture/)**
 
 **[FIRE Calculator](https://github.com/larkindom/Fire-Calc)** — an interactive tool
 that maps every flavor of Financial Independence / Retire Early (Coast, Lean,
