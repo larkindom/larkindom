@@ -32,6 +32,6 @@ with two live in-browser demos (next-token sampling and byte-pair tokenization).
 *Demonstrates: turning a dense technical lecture into a structured, interactive teaching tool.*
 
 **[PRD to Prototype](https://github.com/larkindom/PRDtoPrototype)** — a tool that takes a written product
-requirements doc and turns it into a working, clickable prototype, closing the gap between "what we spec'd"
-and "what it should feel like" without waiting on a design or engineering cycle.
+requirements doc (PRD) and generates a clickable HTML prototype from it, closing the gap between "what we
+spec'd" and "what it should feel like" without waiting on a design or engineering cycle.
 *Demonstrates: shortening the distance between product intent and something stakeholders can actually click through.*
