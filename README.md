@@ -39,8 +39,8 @@ client-side.
 
 **[Product Pulse](./product-dashboard-poc)** — a wireframe proof of concept for the
 "ultimate product dashboard" concept ([Department of Product](https://departmentofproduct.substack.com/p/how-to-build-the-ultimate-product)):
-health metrics across users/UX/commercial/engineering, a decision queue, a live
-sprint board, competitor intelligence, a principle-of-the-day card, and a
+health metrics across users/UX/commercial/engineering, a decision queue, active
+project tracking, a live sprint board, competitor intelligence, and a
 stakeholder update generator with Slack/email/voice-note send buttons stubbed
 out for future MCP connectors. Dummy data, dependency-free, fully client-side.
 *Demonstrates: scoping a fuzzy dashboard concept into a concrete, clickable

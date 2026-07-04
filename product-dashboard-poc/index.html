@@ -207,6 +207,11 @@
   :root[data-theme="dark"] .badge.medium { color: var(--warning); }
   @media (prefers-color-scheme: dark) { .badge.medium { color: var(--warning); } }
   .badge.low .dot { background: var(--good); } .badge.low { color: var(--delta-good); }
+  .badge.on-track .dot { background: var(--good); } .badge.on-track { color: var(--delta-good); }
+  .badge.at-risk .dot { background: var(--warning); } .badge.at-risk { color: #8a5a00; }
+  :root[data-theme="dark"] .badge.at-risk { color: var(--warning); }
+  @media (prefers-color-scheme: dark) { .badge.at-risk { color: var(--warning); } }
+  .badge.blocked .dot { background: var(--critical); } .badge.blocked { color: var(--critical); }
   .decision-actions { display: flex; flex-direction: column; gap: 6px; flex: none; }
   .decision-actions button {
     font-size: 11px; font-weight: 600; padding: 5px 9px; border-radius: 6px;
@@ -215,14 +220,14 @@
   .decision-actions button.done { color: var(--good); border-color: var(--good); }
   .decision.resolved { opacity: 0.45; }
 
-  /* ---------- Principle of the day ---------- */
-  .principle-card { display: flex; flex-direction: column; height: 100%; }
-  .principle-quote {
-    font-size: 15px; line-height: 1.5; font-style: italic; flex: 1;
-    margin-bottom: 12px;
-  }
-  .principle-source { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
-  .principle-source b { color: var(--text-primary); }
+  /* ---------- Active projects ---------- */
+  .project-list { display: flex; flex-direction: column; gap: 10px; }
+  .project-row { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; }
+  .project-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .project-name { font-size: 13.5px; font-weight: 600; }
+  .progress-track { height: 6px; border-radius: 4px; background: var(--gridline); overflow: hidden; margin-bottom: 6px; }
+  .progress-fill { height: 100%; border-radius: 4px; background: var(--series-1); }
+  .project-meta { font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; }
 
   /* ---------- Kanban ---------- */
   .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -354,8 +359,8 @@
             <div class="decision-list" id="decision-list"></div>
           </div>
           <div class="panel">
-            <h2>Principle of the day</h2>
-            <div class="principle-card" id="principle-card"></div>
+            <h2>Active projects <span class="count" id="project-count"></span></h2>
+            <div class="project-list" id="project-list"></div>
           </div>
         </section>
 
@@ -419,9 +424,9 @@
                 <span class="src">A tracker like <b>Klue / Crayon</b>, or an RSS + LLM summarizer watching changelogs and pricing pages</span>
               </div>
               <div class="source-row">
-                <span class="sec">Principle of the day</span>
-                <span class="desc">A rotating quote from a favorite product book</span>
-                <span class="src">A curated quote set, e.g. reusing the <b>Daily Product Lesson</b> project's dataset</span>
+                <span class="sec">Active projects</span>
+                <span class="desc">Portfolio of in-flight initiatives with status, owner, and progress</span>
+                <span class="src"><b>Linear / Jira</b> project view, or a roadmap tool like <b>Productboard / Asana</b></span>
               </div>
               <div class="source-row">
                 <span class="sec">Stakeholder update generator</span>
@@ -440,7 +445,7 @@
             <h2>Try it</h2>
             <ol class="how-steps">
               <li>Switch to <b>Example dashboard</b> and click <b>Approve</b> / <b>Defer</b> on a decision.</li>
-              <li>Click <b>Shuffle</b> on the principle-of-the-day card to cycle through quotes.</li>
+              <li>Check the <b>Active projects</b> panel for status, owner, and progress on each in-flight initiative.</li>
               <li>Click <b>Generate stakeholder update</b>, toggle which sections to include, and watch the draft rebuild.</li>
               <li>Click a channel button (Slack / email / voice note) in that dialog to see the placeholder that shows where each MCP would attach.</li>
               <li>Use the ◐ button to flip between light and dark themes.</li>
@@ -555,14 +560,15 @@
       { name: "Fieldwire", text: "Laid off 8% of staff; roadmap thread suggests mobile app is deprioritized.", when: "2d ago", source: "LinkedIn" },
       { name: "Rivalcorp", text: "New integrations page lists a Slack app — matches our Q3 roadmap item.", when: "3d ago", source: "Changelog" },
     ],
-    principles: [
-      { quote: "Fall in love with the problem, not the solution.", book: "Inspired", author: "Marty Cagan" },
-      { quote: "Your most unhappy customers are your greatest source of learning.", book: "The Innovator's Solution", author: "Clayton Christensen" },
-      { quote: "A product is a solution to a problem in a context.", book: "Shape Up", author: "Ryan Singer" },
-      { quote: "If you're not embarrassed by the first version of your product, you've launched too late.", book: "Reid Hoffman (attributed)", author: "Reid Hoffman" },
-      { quote: "The job of product management is to discover a product that is valuable, usable, and feasible.", book: "Inspired", author: "Marty Cagan" },
+    projects: [
+      { name: "Enterprise SSO rollout", status: "on-track", owner: "Priya (Growth)", progress: 65, target: "Aug 15" },
+      { name: "Annual pricing experiment", status: "at-risk", owner: "Growth", progress: 40, target: "Jul 20" },
+      { name: "Legacy API v1 sunset", status: "on-track", owner: "Platform eng", progress: 80, target: "Sep 1" },
+      { name: "Onboarding redesign", status: "blocked", owner: "Design", progress: 25, target: "Aug 5" },
     ],
   };
+
+  const STATUS_LABEL = { "on-track": "On track", "at-risk": "At risk", "blocked": "Blocked" };
 
   const fmt = (n) => n.toFixed ? n.toFixed(1) : n;
 
@@ -636,21 +642,23 @@
     });
   }
 
-  /* ---------------- Render: principle of the day ---------------- */
+  /* ---------------- Render: active projects ---------------- */
 
-  let principleIdx = new Date().getDate() % DATA.principles.length;
-
-  function renderPrinciple() {
-    const p = DATA.principles[principleIdx];
-    document.getElementById("principle-card").innerHTML = `
-      <div class="principle-quote">&ldquo;${p.quote}&rdquo;</div>
-      <div class="principle-source"><b>${p.book}</b> — ${p.author}</div>
-      <button class="btn" id="shuffle-principle">Shuffle</button>
-    `;
-    document.getElementById("shuffle-principle").addEventListener("click", () => {
-      principleIdx = (principleIdx + 1) % DATA.principles.length;
-      renderPrinciple();
-    });
+  function renderProjects() {
+    document.getElementById("project-count").textContent = "· " + DATA.projects.length + " active";
+    document.getElementById("project-list").innerHTML = DATA.projects.map((p) => `
+      <div class="project-row">
+        <div class="project-top">
+          <span class="project-name">${p.name}</span>
+          <span class="badge ${p.status}"><span class="dot"></span>${STATUS_LABEL[p.status]}</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${p.progress}%"></div></div>
+        <div class="project-meta">
+          <span>${p.owner}</span>
+          <span>${p.progress}% · target ${p.target}</span>
+        </div>
+      </div>
+    `).join("");
   }
 
   /* ---------------- Render: kanban + burndown ---------------- */
@@ -745,9 +753,9 @@
   const UPDATE_SECTIONS = [
     { key: "kpis", label: "Product health metrics", default: true },
     { key: "decisions", label: "Open decisions", default: true },
+    { key: "projects", label: "Active projects", default: true },
     { key: "work", label: "Live work in progress", default: true },
     { key: "competitors", label: "Competitor intelligence", default: false },
-    { key: "principle", label: "Principle of the day", default: false },
   ];
 
   function renderUpdateOptions() {
@@ -778,6 +786,11 @@
       DATA.decisions.forEach((d) => lines.push(`  • [${d.impact}] ${d.title} — ${d.due}`));
       lines.push("");
     }
+    if (checked.has("projects")) {
+      lines.push("Active projects:");
+      DATA.projects.forEach((p) => lines.push(`  • ${p.name}: ${STATUS_LABEL[p.status]}, ${p.progress}% (target ${p.target})`));
+      lines.push("");
+    }
     if (checked.has("work")) {
       const total = Object.values(DATA.kanban).flat().length;
       const done = DATA.kanban["Done"].length;
@@ -787,11 +800,6 @@
     if (checked.has("competitors")) {
       lines.push("Competitor watch:");
       DATA.competitors.slice(0, 2).forEach((c) => lines.push(`  • ${c.name}: ${c.text}`));
-      lines.push("");
-    }
-    if (checked.has("principle")) {
-      const p = DATA.principles[principleIdx];
-      lines.push(`Principle of the day: "${p.quote}" — ${p.author}, ${p.book}`);
       lines.push("");
     }
     document.getElementById("update-draft").value = lines.join("\n").trim();
@@ -851,7 +859,7 @@
   renderConnectors();
   renderKPIs();
   renderDecisions();
-  renderPrinciple();
+  renderProjects();
   renderKanban();
   renderBurndown();
   renderIntel();
