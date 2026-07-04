@@ -83,6 +83,39 @@
   }
   a { color: inherit; }
 
+  /* ---------- App shell: sidebar + content ---------- */
+  .app { display: flex; align-items: flex-start; min-height: 100vh; }
+  .sidebar {
+    width: 216px; flex: none; position: sticky; top: 0; height: 100vh;
+    overflow-y: auto; padding: 20px 12px; border-right: 1px solid var(--border);
+    background: var(--surface-1);
+  }
+  .sidebar .brand { font-size: 16px; font-weight: 700; margin: 0 0 2px 8px; letter-spacing: -0.01em; }
+  .sidebar .brand-sub { font-size: 11px; color: var(--text-muted); margin: 0 0 18px 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
+    font: inherit; font-size: 13.5px; font-weight: 600; color: var(--text-secondary);
+    background: transparent; border: none; border-radius: 8px; padding: 9px 10px;
+    cursor: pointer; margin-bottom: 4px;
+  }
+  .nav-item:hover { background: var(--page); }
+  .nav-item.active { background: var(--series-1); color: #fff; }
+  .nav-item .ico { flex: none; font-size: 14px; }
+
+  .content { flex: 1; min-width: 0; }
+  .view.hidden { display: none; }
+
+  @media (max-width: 760px) {
+    .app { flex-direction: column; }
+    .sidebar {
+      width: 100%; height: auto; position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 4px; padding: 10px 14px;
+      border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto;
+    }
+    .sidebar .brand, .sidebar .brand-sub { display: none; }
+    .nav-item { margin-bottom: 0; white-space: nowrap; }
+  }
+
   .wrap { max-width: 1240px; margin: 0 auto; padding: 20px 20px 64px; }
 
   /* ---------- Topbar ---------- */
@@ -255,53 +288,169 @@
   footer.note {
     margin-top: 24px; font-size: 11.5px; color: var(--text-muted); text-align: center;
   }
+
+  /* ---------- How it works ---------- */
+  .how-header { margin-bottom: 18px; }
+  .how-header h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .how-header p { font-size: 13.5px; line-height: 1.6; color: var(--text-secondary); max-width: 720px; margin: 0; }
+  .how-stack { display: flex; flex-direction: column; gap: 14px; }
+  .how-stack .panel h2 { margin-bottom: 10px; }
+  .source-list { display: flex; flex-direction: column; }
+  .source-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
+    padding: 11px 0; border-bottom: 1px solid var(--gridline);
+    font-size: 12.5px; align-items: start;
+  }
+  .source-row:last-child { border-bottom: none; }
+  .source-row .sec { font-weight: 700; }
+  .source-row .desc { color: var(--text-secondary); }
+  .source-row .src { color: var(--text-muted); }
+  .source-row .src b { color: var(--text-primary); font-weight: 600; }
+  .source-head {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-muted); font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--baseline);
+  }
+  @media (max-width: 640px) {
+    .source-head { display: none; }
+    .source-row { grid-template-columns: 1fr; gap: 4px; }
+    .source-row .src::before { content: "→ "; }
+  }
+  .how-steps { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8; color: var(--text-secondary); }
+  .how-steps li b { color: var(--text-primary); }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <div class="topbar">
-    <div>
-      <h1>Product Pulse</h1>
-      <div class="sub" id="today-date"></div>
-      <div class="connectors" id="connectors"></div>
+  <nav class="sidebar">
+    <div class="brand">Product Pulse</div>
+    <div class="brand-sub">Dashboard wireframe POC</div>
+    <button class="nav-item active" data-view="dashboard"><span class="ico">▦</span>Example dashboard</button>
+    <button class="nav-item" data-view="how"><span class="ico">?</span>How it works</button>
+  </nav>
+
+  <div class="content">
+
+    <div class="view" id="view-dashboard">
+      <div class="wrap">
+
+        <div class="topbar">
+          <div>
+            <div class="sub" id="today-date"></div>
+            <div class="connectors" id="connectors"></div>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn btn-icon" id="theme-toggle" title="Toggle theme">◐</button>
+            <button class="btn btn-primary" id="open-update">Generate stakeholder update</button>
+          </div>
+        </div>
+
+        <section class="kpi-grid" id="kpi-grid"></section>
+
+        <section class="mid-grid">
+          <div class="panel">
+            <h2>Decision queue <span class="count" id="decision-count"></span></h2>
+            <div class="decision-list" id="decision-list"></div>
+          </div>
+          <div class="panel">
+            <h2>Principle of the day</h2>
+            <div class="principle-card" id="principle-card"></div>
+          </div>
+        </section>
+
+        <section class="work-grid">
+          <div class="panel">
+            <h2>Live work in progress <span class="count">· current sprint</span></h2>
+            <div class="legend" id="burndown-legend"></div>
+            <svg id="burndown" width="100%" height="120" viewBox="0 0 600 120" preserveAspectRatio="none" style="margin-bottom:16px;"></svg>
+            <div class="kanban" id="kanban"></div>
+          </div>
+          <div class="panel">
+            <h2>Competitor intelligence</h2>
+            <div class="intel-list" id="intel-list"></div>
+          </div>
+        </section>
+
+        <footer class="note">
+          Wireframe proof of concept — every number on this page is dummy data. Connector chips and
+          the update generator show where Slack, Linear/Jira, and analytics MCPs would plug in.
+        </footer>
+      </div>
     </div>
-    <div class="topbar-actions">
-      <button class="btn btn-icon" id="theme-toggle" title="Toggle theme">◐</button>
-      <button class="btn btn-primary" id="open-update">Generate stakeholder update</button>
+
+    <div class="view hidden" id="view-how">
+      <div class="wrap">
+        <div class="how-header">
+          <h1>How this works</h1>
+          <p>
+            Product Pulse is a wireframe proof of concept for the dashboard described in
+            <a href="https://departmentofproduct.substack.com/p/how-to-build-the-ultimate-product" target="_blank" rel="noopener">Department of Product's
+            "How to build the ultimate product dashboard"</a> — one screen that surfaces the numbers
+            you'd check every day, and lets you act on them by generating a stakeholder update on
+            demand. Everything on the <b>Example dashboard</b> tab is dummy data typed directly into
+            this page; nothing is fetched from a real tool yet.
+          </p>
+        </div>
+
+        <div class="how-stack">
+          <div class="panel">
+            <h2>What powers each section</h2>
+            <div class="source-list">
+              <div class="source-head"><span>Section</span><span>What it shows</span><span>Real data source</span></div>
+              <div class="source-row">
+                <span class="sec">Health metrics</span>
+                <span class="desc">Users, UX, commercial, and engineering KPI tiles with trend sparklines</span>
+                <span class="src"><b>Amplitude / Mixpanel</b> for users &amp; UX, <b>Stripe</b> for commercial, <b>Linear / Jira</b> for velocity</span>
+              </div>
+              <div class="source-row">
+                <span class="sec">Decision queue</span>
+                <span class="desc">Pending calls that need a stakeholder's sign-off, with context and a due date</span>
+                <span class="src">Tagged threads in <b>Slack</b> or a decisions doc in <b>Notion / Confluence</b></span>
+              </div>
+              <div class="source-row">
+                <span class="sec">Live work in progress</span>
+                <span class="desc">Current sprint board and burndown</span>
+                <span class="src"><b>Linear</b> or <b>Jira</b> API</span>
+              </div>
+              <div class="source-row">
+                <span class="sec">Competitor intelligence</span>
+                <span class="desc">Recent competitor moves worth knowing about</span>
+                <span class="src">A tracker like <b>Klue / Crayon</b>, or an RSS + LLM summarizer watching changelogs and pricing pages</span>
+              </div>
+              <div class="source-row">
+                <span class="sec">Principle of the day</span>
+                <span class="desc">A rotating quote from a favorite product book</span>
+                <span class="src">A curated quote set, e.g. reusing the <b>Daily Product Lesson</b> project's dataset</span>
+              </div>
+              <div class="source-row">
+                <span class="sec">Stakeholder update generator</span>
+                <span class="desc">Composes a draft from whichever sections you select, then sends it</span>
+                <span class="src"><b>Slack</b> MCP to post, <b>Gmail</b> MCP to draft/send, text-to-speech for a voice note</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Connector status</h2>
+            <div class="connectors" id="connectors-how"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Try it</h2>
+            <ol class="how-steps">
+              <li>Switch to <b>Example dashboard</b> and click <b>Approve</b> / <b>Defer</b> on a decision.</li>
+              <li>Click <b>Shuffle</b> on the principle-of-the-day card to cycle through quotes.</li>
+              <li>Click <b>Generate stakeholder update</b>, toggle which sections to include, and watch the draft rebuild.</li>
+              <li>Click a channel button (Slack / email / voice note) in that dialog to see the placeholder that shows where each MCP would attach.</li>
+              <li>Use the ◐ button to flip between light and dark themes.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
-
-  <section class="kpi-grid" id="kpi-grid"></section>
-
-  <section class="mid-grid">
-    <div class="panel">
-      <h2>Decision queue <span class="count" id="decision-count"></span></h2>
-      <div class="decision-list" id="decision-list"></div>
-    </div>
-    <div class="panel">
-      <h2>Principle of the day</h2>
-      <div class="principle-card" id="principle-card"></div>
-    </div>
-  </section>
-
-  <section class="work-grid">
-    <div class="panel">
-      <h2>Live work in progress <span class="count">· current sprint</span></h2>
-      <div class="legend" id="burndown-legend"></div>
-      <svg id="burndown" width="100%" height="120" viewBox="0 0 600 120" preserveAspectRatio="none" style="margin-bottom:16px;"></svg>
-      <div class="kanban" id="kanban"></div>
-    </div>
-    <div class="panel">
-      <h2>Competitor intelligence</h2>
-      <div class="intel-list" id="intel-list"></div>
-    </div>
-  </section>
-
-  <footer class="note">
-    Wireframe proof of concept — every number on this page is dummy data. Connector chips and
-    the update generator show where Slack, Linear/Jira, and analytics MCPs would plug in.
-  </footer>
 </div>
 
 <div class="modal-overlay hidden" id="modal-overlay">
@@ -567,11 +716,28 @@
   /* ---------------- Render: connectors ---------------- */
 
   function renderConnectors() {
-    document.getElementById("connectors").innerHTML = DATA.connectors.map((c) => `
+    const html = DATA.connectors.map((c) => `
       <span class="chip ${c.connected ? "connected" : ""}">
         <span class="dot"></span>${c.name} · ${c.connected ? "connected" : "not connected"}
       </span>
     `).join("");
+    document.getElementById("connectors").innerHTML = html;
+    const howEl = document.getElementById("connectors-how");
+    if (howEl) howEl.innerHTML = html;
+  }
+
+  /* ---------------- Sidebar tabs ---------------- */
+
+  function initTabs() {
+    const navItems = document.querySelectorAll(".nav-item");
+    navItems.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        navItems.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".view").forEach((v) => v.classList.add("hidden"));
+        document.getElementById("view-" + btn.dataset.view).classList.remove("hidden");
+      });
+    });
   }
 
   /* ---------------- Stakeholder update generator ---------------- */
@@ -681,6 +847,7 @@
   });
 
   initTheme();
+  initTabs();
   renderConnectors();
   renderKPIs();
   renderDecisions();
