@@ -5,6 +5,12 @@ products, specializing in **private capital markets and real estate proptech**.
 
 **A few things I've built:**
 
+**[Product Status Dashboard](https://github.com/larkindom/ProductDashboard)** — a stakeholder-facing
+dashboard for product status at a glance: key metrics (MAU, MRR, churn, NPS) with trend charts, active
+projects as a release-stage kanban board, and open action items sorted by due date.
+*Demonstrates: turning scattered status updates into one screen a stakeholder can scan in ten seconds.*
+**[Try it out!](https://larkindom.github.io/ProductDashboard/)**
+
 **[PRD to Prototype](https://github.com/larkindom/PRDtoPrototype)** — a tool that takes a written product
 requirements doc (PRD) and generates a clickable HTML prototype from it, closing the gap between "what we
 spec'd" and "what it should feel like" without waiting on a design or engineering cycle.
