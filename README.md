@@ -11,10 +11,14 @@ projects as a release-stage kanban board, and open action items sorted by due da
 *Demonstrates: turning scattered status updates into one screen a stakeholder can scan in ten seconds.*
 **[Try it out!](https://larkindom.github.io/ProductDashboard/)**
 
+[<img src="previews/product-dashboard.png" width="480" alt="Product Status Dashboard preview">](https://larkindom.github.io/ProductDashboard/)
+
 **[PRD to Prototype](https://github.com/larkindom/PRDtoPrototype)** — a tool that takes a written product
 requirements doc (PRD) and generates a clickable HTML prototype from it, closing the gap between "what we
 spec'd" and "what it should feel like" without waiting on a design or engineering cycle.
 *Demonstrates: shortening the distance between product intent and something stakeholders can actually click through.*
+
+[<img src="previews/prd-to-prototype.png" width="480" alt="PRD to Prototype example output">](https://github.com/larkindom/PRDtoPrototype)
 
 **[Kindle Morning Digest](https://github.com/larkindom/RSSforKindle)** — a cloud
 automation that scrapes my RSS feeds + paywalled sources every morning, extracts
@@ -36,6 +40,8 @@ with two live in-browser demos (next-token sampling and byte-pair tokenization).
 *Demonstrates: turning a dense technical lecture into a structured, interactive teaching tool.*
 **[Explore the Primer!](https://larkindom.github.io/LLMTrainingLecture/)**
 
+[<img src="previews/llm-primer.png" width="480" alt="LLM Building & Training Primer preview">](https://larkindom.github.io/LLMTrainingLecture/)
+
 **[FIRE Calculator](https://github.com/larkindom/Fire-Calc)** — an interactive tool
 that maps every flavor of Financial Independence / Retire Early (Coast, Lean,
 regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
@@ -43,5 +49,4 @@ client-side.
 *Demonstrates: turning a broad domain into a clear, usable model and shipping it end-to-end.*
 **[Try it out!](https://larkindom.github.io/Fire-Calc/)**
 
-
-
+[<img src="previews/fire-calc.png" width="480" alt="FIRE Calculator preview">](https://larkindom.github.io/Fire-Calc/)
