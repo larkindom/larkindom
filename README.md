@@ -3,13 +3,13 @@
 Technical Product Manager in NYC with 6+ years building user-driven digital
 products, specializing in **private capital markets and real estate proptech**.
 
-**A few things I've built:**
+**A few things I've built recently:**
 
 **[Product Status Dashboard](https://github.com/larkindom/ProductDashboard)** — a stakeholder-facing
 dashboard for product status at a glance: key metrics (MAU, MRR, churn, NPS) with trend charts, active
 projects as a release-stage kanban board, and open action items sorted by due date.
 *Demonstrates: turning scattered status updates into one screen a stakeholder can scan in ten seconds.*
-**[Try it out!](https://larkindom.github.io/ProductDashboard/)**
+**[Check it out!](https://larkindom.github.io/ProductDashboard/)**
 
 [<img src="previews/product-dashboard.png" width="480" alt="Product Status Dashboard preview">](https://larkindom.github.io/ProductDashboard/)
 
