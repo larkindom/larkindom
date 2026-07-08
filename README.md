@@ -37,3 +37,7 @@ regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
 client-side. 
 **[Try it out!](https://larkindom.github.io/Fire-Calc/)**
 
+---
+
+Built with [Claude Code](https://claude.com/claude-code).
+
