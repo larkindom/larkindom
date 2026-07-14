@@ -5,11 +5,10 @@ products, specializing in **private capital markets and real estate proptech**.
 
 **A few things I've built recently:**
 
-**[Product KB](https://github.com/larkindom/Product-KB)** — a build spec for standing up a
+**[Product Knowledge Base](https://github.com/larkindom/Product-KB)** — a build spec for standing up a
 PM operating system in Claude: the five layer stack (models, surfaces, knowledge base,
-integrations, and self testing agents) that let one PM beat 30 engineering teams in an
-internal hackathon.
-**[Check it out!](https://larkindom.github.io/Product-KB/)**
+integrations, and self testing agents) that can be used as a reference to build a Product Knowledge base at any Company
+**[Explore here!](https://larkindom.github.io/Product-KB/)**
 
 **[Product Status Dashboard](https://github.com/larkindom/ProductDashboard)** — a stakeholder-facing
 dashboard for product status at a glance: key metrics (MAU, MRR, churn, NPS) with trend charts, active
