@@ -5,6 +5,12 @@ products, specializing in **private capital markets and real estate proptech**.
 
 **A few things I've built recently:**
 
+**[Family Story](https://github.com/larkindom/family-story)** — a voice-first way for parents and
+grandparents to record their life stories, one question at a time: no login, no app to install, just a
+personal link and one big record button. A sidebar dashboard lets the family add the people being
+recorded and note how they relate to each other, so separate answers become one connected family story.
+**[Try the demo!](https://larkindom.github.io/family-story/)**
+
 **[Product Knowledge Base](https://github.com/larkindom/Product-KB)** — a build spec for standing up a
 PM operating system in Claude: the five layer stack (models, surfaces, knowledge base,
 integrations, and self testing agents) that can be used as a reference to build a Product Knowledge base at any Company
