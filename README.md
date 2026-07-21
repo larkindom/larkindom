@@ -35,15 +35,3 @@ automation that emails me one product-management lesson every morning: a written
 takeaway plus a few verbatim key quotes, pulled at random from my shelf of product
 books. Multi-format (PDF/EPUB/MOBI) text extraction, a quote-fidelity validator that
 fails the build on any non-verbatim quote, and launchd scheduling.
-
-**[LLM Building & Training Primer](https://github.com/larkindom/LLMTrainingLecture)** — a single-page,
-click-through primer distilled from a Stanford CS229 guest lecture on how ChatGPT-like models are actually
-built: the pretraining objective, tokenization, data pipelines, scaling laws, and post-training (SFT/RLHF/DPO),
-with two live in-browser demos (next-token sampling and byte-pair tokenization).
-**[Explore the Primer!](https://larkindom.github.io/LLMTrainingLecture/)**
-
-**[FIRE Calculator](https://github.com/larkindom/Fire-Calc)** — an interactive tool
-that maps every flavor of Financial Independence / Retire Early (Coast, Lean,
-regular, Fat) from your savings rate and portfolio mix. Dependency-free, fully
-client-side. 
-**[Try it out!](https://larkindom.github.io/Fire-Calc/)**
