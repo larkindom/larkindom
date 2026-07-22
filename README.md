@@ -5,6 +5,11 @@ products, with a passion for **renewable energy climatetech and affordable housi
 
 **A few things I've built recently:**
 
+**[NYC Electrification Map](https://github.com/larkindom/NYC-Electrification-Map)** — a parcel-level
+map that scores NYC buildings for heat pump retrofit readiness, pulling fuel type, building age, flood
+risk, GHG emissions, and disadvantaged-community status live from city open data into a red/orange/green
+match score, with a plain-language strategy note per building.
+
 **[Family Story](https://github.com/larkindom/family-story)** — a voice-first way for parents and
 grandparents to record their life stories, one question at a time: no login, no app to install, just a
 personal link and one big record button. A sidebar dashboard lets the family add the people being
