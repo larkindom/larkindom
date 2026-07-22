@@ -1,7 +1,7 @@
 ### [Hey, I'm Larkin](https://www.linkedin.com/in/larkindomench)
 
 Technical Product Manager in NYC with 6+ years building user-driven digital
-products, specializing in **private capital markets and real estate proptech**.
+products, with a passion for **renewable energy climatetech and affordable housing proptech**
 
 **A few things I've built recently:**
 
