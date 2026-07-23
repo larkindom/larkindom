@@ -16,7 +16,7 @@ match score, with a plain-language strategy note per building.
 hazard risk (flood, wildfire, heat wave, hurricane) on Redfin housing market data across the top
 20 U.S. metros by population, to test an actual question: is climate risk showing up in home
 prices yet, or is the market not pricing it in?
-**[Explore the Map!](https://larkindom.github.io/Climate-Risk-Map/)**
+**[Check out the Map!](https://larkindom.github.io/Climate-Risk-Map/)**
 
 
 **[Family Story](https://github.com/larkindom/family-story)** — a voice-first way for parents and
