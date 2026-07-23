@@ -12,6 +12,13 @@ match score, with a plain-language strategy note per building.
 **[Explore the Map!](https://larkindom.github.io/NYC-Electrification-Map/)**
 
 
+**[Climate Risk & Housing Map](https://github.com/larkindom/Climate-Risk-Map)** — overlays FEMA
+hazard risk (flood, wildfire, heat wave, hurricane) on Redfin housing market data across the top
+20 U.S. metros by population, to test an actual question: is climate risk showing up in home
+prices yet, or is the market not pricing it in?
+**[Explore the Map!](https://larkindom.github.io/Climate-Risk-Map/)**
+
+
 **[Family Story](https://github.com/larkindom/family-story)** — a voice-first way for parents and
 grandparents to record their life stories, one question at a time: no login, no app to install, just a
 personal link and one big record button. A sidebar dashboard lets the family add the people being
