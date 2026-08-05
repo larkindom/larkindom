@@ -5,6 +5,13 @@ products, with a passion for **financial empowerment fintech, renewable energy c
 
 **A few things I've built recently:**
 
+**[NYC Solar Map](https://github.com/larkindom/solar-advocate-nyc)** — a per-building solar economics
+tool built around the question that actually forces a decision: what does doing nothing cost this
+building in Local Law 97 fines, and what does solar buy back? Pulls NYC PLUTO, LL84 energy benchmarking,
+NREL PVWatts production estimates, and live Con Edison grid hosting-capacity data into a single building
+lookup, with a plain-English recommendation and 5/10/25-year ROI snapshots.
+
+
 **[NYC Electrification Map](https://github.com/larkindom/NYC-Electrification-Map)** — a parcel-level
 map that scores NYC buildings for heat pump retrofit readiness, pulling fuel type, building age, flood
 risk, GHG emissions, and disadvantaged-community status live from city open data into a red/orange/green
